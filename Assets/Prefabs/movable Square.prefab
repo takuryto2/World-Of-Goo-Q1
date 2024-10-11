@@ -12,9 +12,7 @@ GameObject:
   - component: {fileID: 1175673093025108762}
   - component: {fileID: 4235809536559793082}
   - component: {fileID: 8086396259509623891}
-  - component: {fileID: 5893470877968855517}
   - component: {fileID: 7658556369254452654}
-  - component: {fileID: 3119773765257144435}
   m_Layer: 3
   m_Name: movable Square
   m_TagString: Player
@@ -161,27 +159,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!231 &5893470877968855517
-SpringJoint2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4866915169791367985}
-  m_Enabled: 0
-  serializedVersion: 4
-  m_EnableCollision: 0
-  m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_BreakAction: 3
-  m_AutoConfigureConnectedAnchor: 0
-  m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0, y: 0}
-  m_AutoConfigureDistance: 0
-  m_Distance: 3
-  m_DampingRatio: 0
-  m_Frequency: 1
 --- !u!114 &7658556369254452654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,16 +171,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1945f69c959e6bd4b9d80ae4925712d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3119773765257144435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4866915169791367985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8374b835818a87141aac9e8804602b40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 3
+  radius: 4
