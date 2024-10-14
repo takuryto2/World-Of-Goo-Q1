@@ -13,9 +13,13 @@ public class BoxManager : MonoBehaviour
     private int boxCount;
 
     [Header("Spring Connection")]
+    [SerializeField] private bool isConnected;
     private List<Collider2D> targets;
-    private List<SpringJoint2D> joints;
-    private bool isConnected;
+
+    [Header("Spring Parameters")]
+    [SerializeField] private float distance;
+    [SerializeField] private float dampingRatio;
+    [SerializeField] private float frequency;
 
     private void Update()
     {
@@ -25,9 +29,20 @@ public class BoxManager : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 targets = Physics2D.OverlapCircleAll(transform.position, radius, 3 << LayerMask.NameToLayer("Anchor")).ToList();
-                print(targets[0].gameObject.name);
-                print(targets.Count);
+                GetComponent<Rigidbody2D>().gravityScale = 0;
             }
+        }
+        else
+        {
+            GetComponent<Rigidbody2D>().gravityScale = 0.3f;
+        }
+
+        if (isConnected)
+        {
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer.color = Color.gray;
+
+            GetComponent<BoxManager>().enabled = false;
         }
     }
 
@@ -39,13 +54,17 @@ public class BoxManager : MonoBehaviour
     private void OnMouseUp()
     {
         dragging = false;
-        if (targets.Count >= 2)
+        if (targets.Count >= 3 && !isConnected)
         {
             isConnected = true;
-            for (int i = 1; i < targets.Count; i++)
+            for (int i = 0; i < targets.Count; i++)
             {
-                gameObject.AddComponent<SpringJoint2D>();
-                joints[i-1].connectedBody = targets[i].gameObject.GetComponent<Rigidbody2D>();
+                SpringJoint2D joint =  gameObject.AddComponent<SpringJoint2D>();
+                joint.autoConfigureDistance = false;
+                joint.distance = distance;
+                joint.dampingRatio = dampingRatio;
+                joint.frequency = frequency;
+                joint.connectedBody = targets[i].gameObject.GetComponent<Rigidbody2D>();
             }
         }
     }
