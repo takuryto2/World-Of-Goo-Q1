@@ -29,12 +29,7 @@ public class BoxManager : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 targets = Physics2D.OverlapCircleAll(transform.position, radius, 3 << LayerMask.NameToLayer("Anchor")).ToList();
-                GetComponent<Rigidbody2D>().gravityScale = 0;
             }
-        }
-        else
-        {
-            GetComponent<Rigidbody2D>().gravityScale = 0.3f;
         }
 
         if (isConnected)
