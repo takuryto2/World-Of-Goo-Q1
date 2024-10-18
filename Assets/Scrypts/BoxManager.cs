@@ -21,6 +21,10 @@ public class BoxManager : MonoBehaviour
     [SerializeField] private float dampingRatio;
     [SerializeField] private float frequency;
 
+    [Header("renderer")]
+    [SerializeField] GameObject rendererPrefab;
+    [SerializeField] GameObject circlePrefab;
+
     private void Update()
     {
         if (dragging && !isConnected)
@@ -29,7 +33,14 @@ public class BoxManager : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 targets = Physics2D.OverlapCircleAll(transform.position, radius, 3 << LayerMask.NameToLayer("Anchor")).ToList();
+                circlePrefab.gameObject.SetActive(true);
+                GetComponent<Collider2D>().enabled = false;
             }
+        }
+        else
+        {
+            circlePrefab.gameObject.SetActive(false);
+            GetComponent<Collider2D>().enabled = true;
         }
 
         if (isConnected)
@@ -38,6 +49,7 @@ public class BoxManager : MonoBehaviour
             spriteRenderer.color = Color.gray;
 
             GetComponent<BoxManager>().enabled = false;
+            circlePrefab.gameObject.SetActive(false);
         }
     }
 
@@ -49,18 +61,29 @@ public class BoxManager : MonoBehaviour
     private void OnMouseUp()
     {
         dragging = false;
-        if (targets.Count >= 3 && !isConnected)
+        if (targets.Count >= 2 && !isConnected)
         {
-            isConnected = true;
-            for (int i = 0; i < targets.Count; i++)
+            if (targets[0].gameObject.TryGetComponent<BoxManager>(out BoxManager component))
             {
-                SpringJoint2D joint =  gameObject.AddComponent<SpringJoint2D>();
-                joint.autoConfigureDistance = false;
-                joint.distance = distance;
-                joint.dampingRatio = dampingRatio;
-                joint.frequency = frequency;
-                joint.connectedBody = targets[i].gameObject.GetComponent<Rigidbody2D>();
-            }
+                if (!component.isActiveAndEnabled)
+                {
+                    isConnected = true;
+                    for (int i = 0; i < targets.Count; i++)
+                    {
+                        SpringJoint2D joint = gameObject.AddComponent<SpringJoint2D>();
+                        GameObject line = Instantiate(rendererPrefab, Vector3.zero, Quaternion.identity);
+                        joint.autoConfigureDistance = false;
+                        joint.distance = Mathf.Clamp(joint.distance, 2f, distance);
+                        joint.dampingRatio = dampingRatio;
+                        joint.frequency = frequency;
+                        joint.connectedBody = targets[i].gameObject.GetComponent<Rigidbody2D>();
+                        line.GetComponent<LineRenerer>().target1 = gameObject;
+                        line.GetComponent<LineRenerer>().target2 = targets[i].gameObject;
+                        line.GetComponent<LineRenerer>().SpringJoint2D = joint;
+                    }
+
+                }
+            }        
         }
     }
     
